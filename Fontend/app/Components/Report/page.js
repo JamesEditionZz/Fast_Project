@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import "./sale.css";
 import "./ptk.css";
+import html2pdf from "html2pdf.js";
 
 function page() {
-  const routes = useRouter();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const modesty = searchParams.get("modesty");
@@ -21,7 +22,7 @@ function page() {
   const Product = data ? JSON.parse(decodeURIComponent(data)) : {};
 
   const [productreport, setProductReport] = useState([]);
-  const [viewpresale, setViewPreSale] = useState(1);
+  const [viewpresale, setViewPreSale] = useState(0);
   const [datamodesty, setDataModesty] = useState([]);
   const [datascreen, setDataScreen] = useState([]);
   const [dataflip, setDataFlip] = useState([]);
@@ -29,6 +30,7 @@ function page() {
   const [dataelectric, setDataElectric] = useState([]);
 
   const Product_header = JSON.parse(Product);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -165,33 +167,56 @@ function page() {
     }, []);
   }
 
-  const PreSale = () => {
-    if (viewpresale == 0) {
-      setViewPreSale(1);
-    } else {
-      setViewPreSale(0);
-    }
+  const btnviewsale = () => {
+    window.print();
   };
 
-  const Comeback = () => {
-    routes.back();
+  const btnloadpfd = () => {
+    setViewPreSale(1);
+    const element = contentRef.current;
+
+    const options = {
+      margin: [8, 17, 0, 13],
+      filename: `${Product_header.Product_name}/${Product_header.type}/${Product_header.width}/${Product_header.depth}/${Product_header.height}.pdf`,
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    };
+
+    html2pdf().from(element).set(options).save();
+
+    setTimeout(() => {
+      windownreload();
+    }, 500);
+  };
+
+  const windownreload = () => {
+    window.location.reload();
   };
 
   return (
     <>
+      <div className="d-flex fixed-top mt-5">
+        <button className="btn btn-danger mx-5" onClick={() => btnviewsale()}>
+          Print
+        </button>
+        <button className="btn btn-warning" onClick={() => btnloadpfd()}>
+          Download PDF
+        </button>
+      </div>
       {viewpresale == 0 && (
-        <div className="container mt-5">
+        <div className="container">
           {productreport.map((item) => (
             <div className="row">
-              <div className="col-12 font-header">
+              <div className="col-12 ptk-font-header">
                 {Product_header.type} {Product_header.Product_name}
               </div>
-              <div className="col-12 border-fixed">
+              <div className="col-12 ptk-border-fixed">
                 <div className="row">
                   <div className="col-4"></div>
                   <div className="col-4">
                     <Image
-                      className="img-width"
+                      className="ptk-img-width"
                       src={`http://localhost:8001${item.Product_img}`}
                       width={10000}
                       height={10000}
@@ -205,171 +230,171 @@ function page() {
                 flip !== "undefined" ||
                 Electric !== "undefined" ||
                 Snake !== "undefined") && (
-                <div>
-                  <div className="col-12 font-accessories">ACCESSORIES</div>
+                <div className="mb-4">
+                  <div className="col-12 ptk-font-accessories">ACCESSORIES</div>
                   <div className="col-12">
                     <div className="row">
                       {modesty != "undefined" && (
-                        <div className="col-2-accessories">
+                        <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top ptk-border-left text-center">
                               FG________
                             </div>
                             {datamodesty.map((item) => (
                               <>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-border-left text-center">
                                   <Image
-                                    className="img-accessories"
+                                    className="ptk-img-accessories"
                                     src={`http://localhost:8001${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
                                   <div className="col-12" align="center">
                                     <label>{item.Access_name}</label>
                                   </div>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
                               <label>
                                 {item.Product_width} x {item.Product_depth} x{" "}
                                 {item.Product_height}
                               </label>
                             </div>
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
                               <label>1</label>
                             </div>
                           </div>
                         </div>
                       )}
                       {screen != "undefined" && (
-                        <div className="col-2-accessories">
+                        <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top text-center">
                               FG________
                             </div>
                             {datascreen.map((item) => (
                               <>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories text-center">
                                   <Image
-                                    className="img-accessories"
+                                    className="ptk-img-accessories"
                                     src={`http://localhost:8001${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
                                     <label>{item.Access_name}</label>
                                   </div>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>
                                 {item.Product_width} x {item.Product_depth} x{" "}
                                 {item.Product_height}
                               </label>
                             </div>
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
                           </div>
                         </div>
                       )}
                       {flip != "undefined" && (
-                        <div className="col-2-accessories">
+                        <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top ptk-border-top text-center">
                               FG________
                             </div>
                             {dataflip.map((item) => (
                               <>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <Image
-                                    className="img-accessories"
+                                    className="ptk-img-accessories"
                                     src={`http://localhost:8001${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
                                     <label>{item.Access_name}</label>
                                   </div>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>Flip</label>
                             </div>
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
                           </div>
                         </div>
                       )}
                       {Snake != "undefined" && (
-                        <div className="col-2-accessories">
+                        <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top text-center">
                               FG________
                             </div>
                             {datawireway.map((item) => (
                               <>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories text-center">
                                   <Image
-                                    className="img-accessories"
+                                    className="ptk-img-accessories"
                                     src={`http://localhost:8001${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
                                     <label>{item.Access_name}</label>
                                   </div>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>Vertical Wireway</label>
                             </div>
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
                           </div>
                         </div>
                       )}
                       {Electric != "undefined" && (
-                        <div className="col-2-accessories">
+                        <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top text-center">
                               FG________
                             </div>
                             {dataelectric.map((item) => (
                               <>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories text-center">
                                   <Image
-                                    className="img-accessories"
+                                    className="ptk-img-accessories"
                                     src={`http://localhost:8001${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 border-box-accessories text-center">
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
                                     <label>{item.Access_name}</label>
                                   </div>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>ช่องร้อยสายไฟ</label>
                             </div>
-                            <div className="col-12 border-box-accessories text-center">
+                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
                           </div>
@@ -379,338 +404,390 @@ function page() {
                   </div>
                 </div>
               )}
-              <div className="col-12 font-description mt-5 line-header">
+              <div className="col-12 ptk-font-description mt-3 ptk-line-header">
                 DESCRIPTIONS
               </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">ราคาเฟอร์นิเจอร์</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">000,000 บาท</div>
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">
+                  ราคาเฟอร์นิเจอร์
+                </div>
+                <div className="col-2 ptk-text-detail"></div>
+                <div className="col-6 ptk-text-detail">000,000 บาท</div>
               </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">ภาษีมูลค่าเพิ่ม</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">000,000 บาท</div>
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">
+                  ภาษีมูลค่าเพิ่ม
+                </div>
+                <div className="col-2 ptk-text-detail"></div>
+                <div className="col-6 ptk-text-detail">000,000 บาท</div>
               </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">
                   ราคาเสนอรวมทั้งสิ้น
                 </div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">000,000 บาท</div>
+                <div className="col-2 ptk-text-detail"></div>
+                <div className="col-6 ptk-text-detail">000,000 บาท</div>
               </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">กำหนดยืนราคา</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">XX / XX / XXXX</div>
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">กำหนดยืนราคา</div>
+                <div className="col-2 ptk-text-detail"></div>
+                <div className="col-6 ptk-text-detail">XX / XX / XXXX</div>
               </div>
               <div className="line-space-1"></div>
-              <div className="row line-description">
-                <div className="col-3 text-description">ขนาด(มม)</div>
-                <div className="col-2 text-detail">กว้าง x ลึก x สูง</div>
-                <div className="col-6 text-detail">
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">ขนาด(มม)</div>
+                <div className="col-2 ptk-text-detail">กว้าง x ลึก x สูง</div>
+                <div className="col-6 ptk-text-detail">
                   {item.Product_width} x {item.Product_depth} x{" "}
                   {item.Product_height}
                 </div>
               </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">TOP</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">XXXXXXXXXX</div>
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">TOP</div>
+                <div className="col-2 ptk-text-detail"></div>
+                <div className="col-6 ptk-text-detail">XXXXXXXXXX</div>
               </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">ขา</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">XXXXXXXXXX</div>
+              <div className="row ptk-line-description">
+                <div className="col-3 ptk-text-description">ขา</div>
+                <div className="col-2 ptk-text-detail"></div>
+                <div className="col-6 ptk-text-detail">XXXXXXXXXX</div>
               </div>
               <div className="line-space-2"></div>
-              <div className="row line-description">
-                <div className="col-3 text-description">Modesty Panel</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">{modesty}</div>
-              </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">Screen</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">{screen}</div>
-              </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">Flip Outlet</div>
-                <div className="col-2 text-detail">{Flipposition}</div>
-                <div className="col-6 text-detail">{flip}</div>
-              </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">Vertical Wireway</div>
-                <div className="col-2 text-detail"></div>
-                <div className="col-6 text-detail">{Snake}</div>
-              </div>
-              <div className="row line-description">
-                <div className="col-3 text-description">ช่องรอยสายไฟ</div>
-                <div className="col-2 text-detail">{Electricposition}</div>
-                <div className="col-6 text-detail">{Electric}</div>
-              </div>
+              {modesty != "undefined" && (
+                <div className="row ptk-line-description">
+                  <div className="col-3 ptk-text-description">
+                    Modesty Panel
+                  </div>
+                  <div className="col-2 ptk-text-detail"></div>
+                  <div className="col-6 ptk-text-detail">{modesty}</div>
+                </div>
+              )}
+              {screen != "undefined" && (
+                <div className="row ptk-line-description">
+                  <div className="col-3 ptk-text-description">Screen</div>
+                  <div className="col-2 ptk-text-detail"></div>
+                  <div className="col-6 ptk-text-detail">{screen}</div>
+                </div>
+              )}
+              {flip != "undefined" && (
+                <div className="row ptk-line-description">
+                  <div className="col-3 ptk-text-description">Flip Outlet</div>
+                  <div className="col-2 ptk-text-detail">{Flipposition}</div>
+                  <div className="col-6 ptk-text-detail">{flip}</div>
+                </div>
+              )}
+              {Snake != "undefined" && (
+                <div className="row ptk-line-description">
+                  <div className="col-3 ptk-text-description">
+                    Vertical Wireway
+                  </div>
+                  <div className="col-2 ptk-text-detail"></div>
+                  <div className="col-6 ptk-text-detail">{Snake}</div>
+                </div>
+              )}
+              {Electric != "undefined" && (
+                <div className="row ptk-line-description">
+                  <div className="col-3 ptk-text-description">ช่องรอยสายไฟ</div>
+                  <div className="col-2 ptk-text-detail">
+                    {Electricposition}
+                  </div>
+                  <div className="col-6 ptk-text-detail">{Electric}</div>
+                </div>
+              )}
             </div>
           ))}
         </div>
       )}
-      {viewpresale == 1 && (
-        <div className="container">
-          {productreport.map((item) => (
-            <div className="row">
-              <div className="col-12 font-header">
-                {Product_header.type} {Product_header.Product_name}
-              </div>
-              <div className="col-12 border-fixed">
-                <div className="row">
-                  <div className="col-4"></div>
-                  <div className="col-4">
-                    <Image
-                      className="img-width"
-                      src={`http://localhost:8001${item.Product_img}`}
-                      width={10000}
-                      height={10000}
-                    />
-                  </div>
-                  <div className="col-4"></div>
+      <div ref={contentRef}>
+        {viewpresale == 1 && (
+          <div className="container">
+            <div className="logo">
+              <Image
+                className="image-logo"
+                src="/img/logo.png"
+                width={120}
+                height={70}
+              />
+            </div>
+
+            {productreport.map((item) => (
+              <div className="row">
+                <div className="col-12 font-header">
+                  {Product_header.type} {Product_header.Product_name}
                 </div>
-              </div>
-              {(modesty !== "undefined" ||
-                screen !== "undefined" ||
-                flip !== "undefined" ||
-                Electric !== "undefined" ||
-                Snake !== "undefined") && (
-                <>
-                  <div className="col-12 font-accessories">ACCESSORIES</div>
-                  <div className="col-12">
-                    <div className="row">
-                      {modesty != "undefined" && (
-                        <div className="col-2-accessories">
-                          <div className="row">
-                            {datamodesty.map((item) => (
-                              <>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <Image
-                                    className="img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
-                                    width={10000}
-                                    height={10000}
-                                  />
-                                </div>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <div className="col-12" align="center">
-                                    <label className="text-accessories">
-                                      {item.Access_name}
-                                    </label>
+                <div className="col-12 border-fixed">
+                  <div className="row">
+                    <div className="col-4"></div>
+                    <div className="col-4">
+                      <Image
+                        className="img-width"
+                        src={`http://localhost:8001${item.Product_img}`}
+                        width={10000}
+                        height={10000}
+                      />
+                    </div>
+                    <div className="col-4"></div>
+                  </div>
+                </div>
+                {(modesty !== "undefined" ||
+                  screen !== "undefined" ||
+                  flip !== "undefined" ||
+                  Electric !== "undefined" ||
+                  Snake !== "undefined") && (
+                  <>
+                    <div className="col-12 font-accessories">ACCESSORIES</div>
+                    <div className="col-12">
+                      <div className="row">
+                        {modesty != "undefined" && (
+                          <div className="col-2-accessories border-left border-box">
+                            <div className="row">
+                              {datamodesty.map((item) => (
+                                <>
+                                  <div className="col-12 text-center">
+                                    <Image
+                                      className="img-accessories"
+                                      src={`http://localhost:8001${item.Access_img}`}
+                                      width={10000}
+                                      height={10000}
+                                    />
                                   </div>
-                                </div>
-                              </>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {screen != "undefined" && (
-                        <div className="col-2-accessories">
-                          <div className="row">
-                            {datascreen.map((item) => (
-                              <>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <Image
-                                    className="img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
-                                    width={1000}
-                                    height={1000}
-                                  />
-                                </div>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <div className="col-12" align="center">
-                                    <label className="text-accessories">
-                                      {item.Access_name}
-                                    </label>
+                                  <div className="col-12 text-center">
+                                    <div className="col-12" align="center">
+                                      <label className="text-accessories">
+                                        {item.Access_name}
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            ))}
+                                </>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {flip != "undefined" && (
-                        <div className="col-2-accessories">
-                          <div className="row">
-                            {dataflip.map((item) => (
-                              <>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <Image
-                                    className="img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
-                                    width={1000}
-                                    height={1000}
-                                  />
-                                </div>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <div className="col-12" align="center">
-                                    <label className="text-accessories">
-                                      {item.Access_name}
-                                    </label>
+                        )}
+                        {screen != "undefined" && (
+                          <div className="col-2-accessories border-box">
+                            <div className="row">
+                              {datascreen.map((item) => (
+                                <>
+                                  <div className="col-12 text-center">
+                                    <Image
+                                      className="img-accessories"
+                                      src={`http://localhost:8001${item.Access_img}`}
+                                      width={1000}
+                                      height={1000}
+                                    />
                                   </div>
-                                </div>
-                              </>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {Snake != "undefined" && (
-                        <div className="col-2-accessories">
-                          <div className="row">
-                            {datawireway.map((item) => (
-                              <>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <Image
-                                    className="img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
-                                    width={1000}
-                                    height={1000}
-                                  />
-                                </div>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <div className="col-12" align="center">
-                                    <label className="text-accessories">
-                                      {item.Access_name}
-                                    </label>
+                                  <div className="col-12 text-center">
+                                    <div className="col-12" align="center">
+                                      <label className="text-accessories">
+                                        {item.Access_name}
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            ))}
+                                </>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {Electric != "undefined" && (
-                        <div className="col-2-accessories">
-                          <div className="row">
-                            {dataelectric.map((item) => (
-                              <>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <Image
-                                    className="img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
-                                    width={1000}
-                                    height={1000}
-                                  />
-                                </div>
-                                <div className="col-12 border-box-accessories text-center">
-                                  <div className="col-12" align="center">
-                                    <label className="text-accessories">
-                                      {item.Access_name}
-                                    </label>
+                        )}
+                        {flip != "undefined" && (
+                          <div className="col-2-accessories border-box">
+                            <div className="row">
+                              {dataflip.map((item) => (
+                                <>
+                                  <div className="col-12 text-center">
+                                    <Image
+                                      className="img-accessories"
+                                      src={`http://localhost:8001${item.Access_img}`}
+                                      width={1000}
+                                      height={1000}
+                                    />
                                   </div>
-                                </div>
-                              </>
-                            ))}
+                                  <div className="col-12 text-center">
+                                    <div className="col-12" align="center">
+                                      <label className="text-accessories">
+                                        {item.Access_name}
+                                      </label>
+                                    </div>
+                                  </div>
+                                </>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                        {Snake != "undefined" && (
+                          <div className="col-2-accessories border-box">
+                            <div className="row">
+                              {datawireway.map((item) => (
+                                <>
+                                  <div className="col-12 text-center">
+                                    <Image
+                                      className="img-accessories"
+                                      src={`http://localhost:8001${item.Access_img}`}
+                                      width={1000}
+                                      height={1000}
+                                    />
+                                  </div>
+                                  <div className="col-12 text-center">
+                                    <div className="col-12" align="center">
+                                      <label className="text-accessories">
+                                        {item.Access_name}
+                                      </label>
+                                    </div>
+                                  </div>
+                                </>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {Electric != "undefined" && (
+                          <div className="col-2-accessories border-box">
+                            <div className="row">
+                              {dataelectric.map((item) => (
+                                <>
+                                  <div className="col-12 text-center">
+                                    <Image
+                                      className="img-accessories"
+                                      src={`http://localhost:8001${item.Access_img}`}
+                                      width={1000}
+                                      height={1000}
+                                    />
+                                  </div>
+                                  <div className="col-12 text-center">
+                                    <div className="col-12" align="center">
+                                      <label className="text-accessories">
+                                        {item.Access_name}
+                                      </label>
+                                    </div>
+                                  </div>
+                                </>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="col-12 font-description report-cm line-header">
+                  DESCRIPTIONS
+                </div>
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">
+                      ราคาเฟอร์นิเจอร์
+                    </div>
+                    <div className="col-2 text-detail"></div>
+                    <div className="col-6 text-detail">000,000 บาท</div>
+                  </div>
+                </div>
+                <br />
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">
+                      ภาษีมูลค่าเพิ่ม
+                    </div>
+                    <div className="col-2 text-detail"></div>
+                    <div className="col-6 text-detail">000,000 บาท</div>
+                  </div>
+                </div>
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">
+                      ราคาเสนอรวมทั้งสิ้น
+                    </div>
+                    <div className="col-2 text-detail"></div>
+                    <div className="col-6 text-detail">000,000 บาท</div>
+                  </div>
+                </div>
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">กำหนดยืนราคา</div>
+                    <div className="col-2 text-detail"></div>
+                    <div className="col-6 text-detail">XX / XX / XXXX</div>
+                  </div>
+                </div>
+                <div className="line-space-1"></div>
+                <div className="line-space-1"></div>
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">ขนาด(มม)</div>
+                    <div className="col-2 text-detail">กว้าง x ลึก x สูง</div>
+                    <div className="col-6 text-detail">
+                      {item.Product_width} x {item.Product_depth} x{" "}
+                      {item.Product_height}
                     </div>
                   </div>
-                </>
-              )}
-              <div className="col-12 font-description mt-5 line-header">
-                DESCRIPTIONS
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">ราคาเฟอร์นิเจอร์</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">000,000 บาท</div>
                 </div>
-              </div>
-              <br />
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">ภาษีมูลค่าเพิ่ม</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">000,000 บาท</div>
-                </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">
-                    ราคาเสนอรวมทั้งสิ้น
-                  </div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">000,000 บาท</div>
-                </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">กำหนดยืนราคา</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">XX / XX / XXXX</div>
-                </div>
-              </div>
-              <div className="line-space-1"></div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">ขนาด(มม)</div>
-                  <div className="col-2 text-detail">กว้าง x ลึก x สูง</div>
-                  <div className="col-6 text-detail">
-                    {item.Product_width} x {item.Product_depth} x{" "}
-                    {item.Product_height}
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">TOP</div>
+                    <div className="col-2 text-detail"></div>
+                    <div className="col-6 text-detail">XXXXXXXXXX</div>
                   </div>
                 </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">TOP</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">XXXXXXXXXX</div>
+                <div className="line-description">
+                  <div className="row">
+                    <div className="col-3 text-description">ขา</div>
+                    <div className="col-2 text-detail"></div>
+                    <div className="col-6 text-detail">XXXXXXXXXX</div>
+                  </div>
                 </div>
+                <div className="line-space-2"></div>
+                {modesty != "undefined" && (
+                  <div className="line-description">
+                    <div className="row">
+                      <div className="col-3 text-description">
+                        Modesty Panel
+                      </div>
+                      <div className="col-2 text-detail"></div>
+                      <div className="col-6 text-detail">{modesty}</div>
+                    </div>
+                  </div>
+                )}
+                {screen != "undefined" && (
+                  <div className="line-description">
+                    <div className="row">
+                      <div className="col-3 text-description">Screen</div>
+                      <div className="col-2 text-detail"></div>
+                      <div className="col-6 text-detail">{screen}</div>
+                    </div>
+                  </div>
+                )}
+                {flip != "undefined" && (
+                  <div className="line-description">
+                    <div className="row">
+                      <div className="col-3 text-description">Flip Outlet</div>
+                      <div className="col-2 text-detail">{Flipposition}</div>
+                      <div className="col-6 text-detail">{flip}</div>
+                    </div>
+                  </div>
+                )}
+                {Snake != "undefined" && (
+                  <div className="line-description">
+                    <div className="row">
+                      <div className="col-3 text-description">
+                        Vertical Wireway
+                      </div>
+                      <div className="col-2 text-detail"></div>
+                      <div className="col-6 text-detail">{Snake}</div>
+                    </div>
+                  </div>
+                )}
+                {Electric != "undefined" && (
+                  <div className="line-description">
+                    <div className="row">
+                      <div className="col-3 text-description">ช่องรอยสายไฟ</div>
+                      <div className="col-2 text-detail">
+                        {Electricposition}
+                      </div>
+                      <div className="col-6 text-detail">{Electric}</div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">ขา</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">XXXXXXXXXX</div>
-                </div>
-              </div>
-              <div className="line-space-2"></div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">Modesty Panel</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">{modesty}</div>
-                </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">Screen</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">{screen}</div>
-                </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">Flip Outlet</div>
-                  <div className="col-2 text-detail">{Flipposition}</div>
-                  <div className="col-6 text-detail">{flip}</div>
-                </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">Vertical Wireway</div>
-                  <div className="col-2 text-detail"></div>
-                  <div className="col-6 text-detail">{Snake}</div>
-                </div>
-              </div>
-              <div className="line-description">
-                <div className="row">
-                  <div className="col-3 text-description">ช่องรอยสายไฟ</div>
-                  <div className="col-2 text-detail">{Electricposition}</div>
-                  <div className="col-6 text-detail">{Electric}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </>
   );
 }
