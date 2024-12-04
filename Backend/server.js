@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs-extra");
 const path = require("path");
+const SMB2 = require("smb2");
 
 const app = express();
 const port = 5002;
@@ -23,6 +24,13 @@ const config = {
   },
 };
 
+// Create an SMB2 client
+const smbClient = new SMB2({
+  share: '\\\\10.15.0.12\\Practika\\PTK Shared Center\\CAD-Creation\\XS Program', // แชร์ที่ SMB share
+  username: 'kanpong.thi',   // ชื่อผู้ใช้
+  password: 'Jamesye@123',   // รหัสผ่าน
+});
+
 app.get("/api/get", async (req, res) => {
   try {
     const pool = await sql.connect(config);
@@ -37,10 +45,27 @@ app.get("/api/get", async (req, res) => {
       const productImg = product.Product_img;
 
       if (typeof productImg === "string") {
+        const imagePath = productImg.replace(/\\/g, "/");
         // สร้าง URL สำหรับภาพที่แชร์ใน W drive
-        const tempUrl = `/api/images/${encodeURIComponent(
-          productImg.replace(/\\/g, "/")
-        )}`;
+        const tempUrl = `/api/images/${encodeURIComponent(imagePath)}`;
+
+        smbClient.readFile(imagePath, (err, fileData) => {
+          if (err) {
+            console.error('Error reading file from SMB share:', err);
+          } else {
+            console.log('File data:', fileData);
+          }
+        });
+
+        smbClient.readFile(imagePath, (err, fileData) => {
+          if (err) {
+            console.error('Error reading file from SMB share:', err);
+          } else {
+            console.log('File data:', fileData);
+          }
+        });
+
+
         return {
           Product_name: product.Product_name,
           Product_type: product.Product_type,
