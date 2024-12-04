@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import {React, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import "./Product.css";
 
-function page() {
+export const dynamic = "force-dynamic";
+
+function index() {
   const routes = useRouter();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
@@ -135,7 +137,8 @@ function page() {
     setShowCatalog(!showCatalog);
   };
 
-  console.log(selectedProduct.type);
+  console.log(product);
+  
 
   return (
     <>
@@ -765,4 +768,4 @@ function page() {
   );
 }
 
-export default page;
+export default index;

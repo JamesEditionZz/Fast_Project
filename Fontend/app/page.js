@@ -1,6 +1,6 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./page.css";
+import "./deploy.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";

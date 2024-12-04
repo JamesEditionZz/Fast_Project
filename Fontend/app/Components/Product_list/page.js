@@ -1,10 +1,9 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../page.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Product_view from "../Product/Table/page";
+import Product_view from "../Product/Table";
 import "./Product_list.css";
 
 export default function page() {
@@ -100,13 +99,16 @@ export default function page() {
 
   const CheckSize = async (depth, width, height) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checksize`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ depth, width, height, product_model }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/checksize`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ depth, width, height, product_model }),
+        }
+      );
 
       const data = await res.json();
 
@@ -139,13 +141,16 @@ export default function page() {
 
   const searchprice = async (lowPrice, highPrice) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkprice`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ lowPrice, highPrice, product_model }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/checkprice`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ lowPrice, highPrice, product_model }),
+        }
+      );
 
       const data = await res.json();
 
@@ -157,13 +162,16 @@ export default function page() {
 
   const selectitem = async (type) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/selectItem`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ type, product_model }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/selectItem`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ type, product_model }),
+        }
+      );
 
       const data = await res.json();
 
@@ -175,7 +183,7 @@ export default function page() {
 
   const handleSubmit = async () => {
     const productData = encodeURIComponent(JSON.stringify(selectedProduct));
-    router.push(`../Components/Product/Table?data=${productData}`);
+    router.push(`../Components/Product?data=${productData}`);
   };
 
   const cancelModel = () => {
@@ -188,8 +196,7 @@ export default function page() {
     setDepth(0);
     setWidth(0);
     setHeight(0);
-  };
-  
+  };  
 
   return (
     <div>
@@ -305,7 +312,7 @@ export default function page() {
               {filteredData.length > 0
                 ? filteredData.map((item, index) => (
                     <div
-                      className={`col-3 select-product`}
+                      className={`col-4 select-product`}
                       key={index}
                       onClick={() =>
                         setSelectedProduct({
@@ -331,22 +338,24 @@ export default function page() {
                             : "none",
                       }}
                     >
-                      <div className="row">
-                        <div className="col-12 d-flex justify-content-center">
+                      <div className="row image-center">
+                        <div className="col-12">
                           <Image
-                            className="image-width"
+                            className={`${item.Product_type == "chair"} ? image-width-chair : "image-width-table"`}
                             src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
                             width={1000}
                             height={1000}
                             alt="table"
                           />
                         </div>
-                        <div className="col-12 text-center">
-                          {item.Product_model}
-                        </div>
-                        <div className="col-12 text-center">
-                          {item.Product_width} * {item.Product_depth} *{" "}
-                          {item.Product_height}
+                        <div className="text-item">
+                          <div className="col-12 text-center">
+                            {item.Product_model}
+                          </div>
+                          <div className="col-12 text-center">
+                            {item.Product_width} * {item.Product_depth} *{" "}
+                            {item.Product_height}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -359,7 +368,7 @@ export default function page() {
                   product.map((item, index) => (
                     <>
                       <div
-                        className="col-3 h-50 select-product mt-2"
+                        className="col-4 select-product mt-2"
                         key={index}
                         onClick={() =>
                           setSelectedProduct({
@@ -389,21 +398,23 @@ export default function page() {
                         }}
                       >
                         <div className="row">
-                          <div className="col-12 d-flex justify-content-center">
+                          <div className="col-12 image-center">
                             <Image
-                              className="image-width"
+                              className={`${item.Product_type == "chair"} ? image-width-chair : "image-width-table"` }
                               src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
                               width={1000}
                               height={1000}
                               alt="table"
                             />
                           </div>
-                          <div className="col-12 text-center">
-                            {item.Product_model}
-                          </div>
-                          <div className="col-12 text-center">
-                            {item.Product_width} * {item.Product_depth} *{" "}
-                            {item.Product_height}
+                          <div className="text-item">
+                            <div className="col-12 text-center">
+                              {item.Product_model}
+                            </div>
+                            <div className="col-12 text-center">
+                              {item.Product_width} * {item.Product_depth} *{" "}
+                              {item.Product_height}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -443,7 +454,7 @@ export default function page() {
                 key={index}
                 onClick={() => handleSelected(item.Product_name)} // ส่ง Product_name เมื่อกดเลือก
               >
-                <div className="col-12">
+                <div className="col-12 image-center">
                   <Image
                     className="view-image"
                     src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
@@ -452,7 +463,11 @@ export default function page() {
                     alt={`${item.Product_name}`}
                   />
                 </div>
-                <div className="col-12 d-flex justify-content-center">{item.Product_name}</div>
+                <div className="text-item">
+                  <div className="col-12">
+                    {item.Product_name}
+                  </div>
+                </div>
               </div>
             ))}
           </div>

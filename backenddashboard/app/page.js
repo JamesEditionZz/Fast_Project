@@ -11,6 +11,8 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [loginfail, setLoginfail] = useState(0);
 
+  const localhost = 'localhost:5002'
+
   const login = async () => {
     const fecthdata = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/backenddashboard/check/member`,

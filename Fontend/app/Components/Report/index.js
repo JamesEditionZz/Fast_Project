@@ -3,11 +3,10 @@ import React, { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import "./sale.css";
 import "./ptk.css";
 import html2pdf from "html2pdf.js";
 
-function page() {
+function index() {
   const router = useRouter()
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
@@ -36,7 +35,7 @@ function page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:8001/api/ProductReport`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ProductReport`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -62,7 +61,7 @@ function page() {
     useEffect(() => {
       const imgmodesty = async () => {
         try {
-          const res = await fetch(`http://localhost:8001/api/Report/modesty`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/modesty`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ modesty }),
@@ -83,7 +82,7 @@ function page() {
     useEffect(() => {
       const imgscreen = async () => {
         try {
-          const res = await fetch(`http://localhost:8001/api/Report/Screen`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Screen`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ screen }),
@@ -104,7 +103,7 @@ function page() {
     useEffect(() => {
       const imgFlip = async () => {
         try {
-          const res = await fetch(`http://localhost:8001/api/Report/Flip`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Flip`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ flip }),
@@ -125,7 +124,7 @@ function page() {
     useEffect(() => {
       const imgWireway = async () => {
         try {
-          const res = await fetch(`http://localhost:8001/api/Report/Wireway`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Wireway`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ Snake }),
@@ -146,7 +145,7 @@ function page() {
     useEffect(() => {
       const imgElectric = async () => {
         try {
-          const res = await fetch(`http://localhost:8001/api/Report/Electric`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Electric`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ Electric }),
@@ -223,7 +222,7 @@ function page() {
                   <div className="col-4">
                     <Image
                       className="ptk-img-width"
-                      src={`http://localhost:8001${item.Product_img}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
                       width={10000}
                       height={10000}
                     />
@@ -251,7 +250,7 @@ function page() {
                                 <div className="col-12 ptk-border-box-accessories ptk-border-left text-center">
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
@@ -286,7 +285,7 @@ function page() {
                                 <div className="col-12 ptk-border-box-accessories text-center">
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
@@ -318,7 +317,7 @@ function page() {
                                 <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
@@ -350,7 +349,7 @@ function page() {
                                 <div className="col-12 ptk-border-box-accessories text-center">
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
@@ -382,7 +381,7 @@ function page() {
                                 <div className="col-12 ptk-border-box-accessories text-center">
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`http://localhost:8001${item.Access_img}`}
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                     width={1000}
                                     height={1000}
                                   />
@@ -524,7 +523,7 @@ function page() {
                     <div className="col-4">
                       <Image
                         className="img-width"
-                        src={`http://localhost:8001${item.Product_img}`}
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
                         width={10000}
                         height={10000}
                       />
@@ -549,7 +548,7 @@ function page() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`http://localhost:8001${item.Access_img}`}
+                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                       width={10000}
                                       height={10000}
                                     />
@@ -574,7 +573,7 @@ function page() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`http://localhost:8001${item.Access_img}`}
+                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -599,7 +598,7 @@ function page() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`http://localhost:8001${item.Access_img}`}
+                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -624,7 +623,7 @@ function page() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`http://localhost:8001${item.Access_img}`}
+                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -649,7 +648,7 @@ function page() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`http://localhost:8001${item.Access_img}`}
+                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -793,4 +792,4 @@ function page() {
   );
 }
 
-export default page;
+export default index;
