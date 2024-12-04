@@ -1,0 +1,13 @@
+/* .image-width{
+    width: 100px;
+    height: 110px;
+}*/
+
+.view-image {
+    width: 100%;
+    height: 100%;
+}
+
+.test-border {
+    border: 1px solid red;
+}

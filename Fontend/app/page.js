@@ -19,7 +19,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:8001/api/get");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get`);
       const fetchedData = await response.json();
       setData(fetchedData);
     };
@@ -32,7 +32,7 @@ export default function Home() {
     setMenuNextPage(true);
     try {
       const response = await fetch(
-        `http://localhost:8001/api/equipment_list?id=${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/equipment_list?id=${id}`,
         {
           method: "GET",
           headers: {
@@ -68,14 +68,14 @@ export default function Home() {
                 <div className="col-12">
                   <Image
                     className="img-width"
-                    src={`http://localhost:8001${item.Product_img}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
                     width={500}
                     height={500}
                     alt="image"
                   />
                 </div>
                 <div className="col-12 mt-2">
-                  {item.Product_type}
+                  {item.Product_name}
                 </div>
               </div>
             ))}

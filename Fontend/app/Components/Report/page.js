@@ -8,6 +8,7 @@ import "./ptk.css";
 import html2pdf from "html2pdf.js";
 
 function page() {
+  const router = useRouter()
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const modesty = searchParams.get("modesty");
@@ -42,12 +43,7 @@ function page() {
           },
           body: JSON.stringify({
             Product,
-            modesty,
-            screen,
             color,
-            flip,
-            Electric,
-            Snake,
           }), // ใช้ data จาก query string
         });
 
@@ -190,13 +186,23 @@ function page() {
     }, 500);
   };
 
+  const btnbackpage = () => {
+    router.back()
+  }
+
   const windownreload = () => {
     window.location.reload();
   };
 
+  console.log(productreport);
+  
+
   return (
     <>
       <div className="d-flex fixed-top mt-5">
+      <button className="btn btn-danger mx-5" onClick={() => btnbackpage()}>
+          ย้อนกลับ
+        </button>
         <button className="btn btn-danger mx-5" onClick={() => btnviewsale()}>
           Print
         </button>
@@ -205,11 +211,11 @@ function page() {
         </button>
       </div>
       {viewpresale == 0 && (
-        <div className="container">
+        <div className="width-print">
           {productreport.map((item) => (
             <div className="row">
               <div className="col-12 ptk-font-header">
-                {Product_header.type} {Product_header.Product_name}
+                {Product_header.type} {Product_header.Product_name} / {productreport[0].Product_model}
               </div>
               <div className="col-12 ptk-border-fixed">
                 <div className="row">
@@ -232,7 +238,7 @@ function page() {
                 Snake !== "undefined") && (
                 <div className="mb-4">
                   <div className="col-12 ptk-font-accessories">ACCESSORIES</div>
-                  <div className="col-12">
+                  <div className="col-12 w-100">
                     <div className="row">
                       {modesty != "undefined" && (
                         <div className="ptk-col-2-accessories">
@@ -252,7 +258,7 @@ function page() {
                                 </div>
                                 <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
                                   <div className="col-12" align="center">
-                                    <label>{item.Access_name}</label>
+                                    <label>Modesty</label>
                                   </div>
                                 </div>
                               </>
@@ -287,17 +293,14 @@ function page() {
                                 </div>
                                 <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
-                                    <label>{item.Access_name}</label>
+                                    <label>Screen</label>
                                   </div>
+                                </div>
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                  <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
-                              <label>
-                                {item.Product_width} x {item.Product_depth} x{" "}
-                                {item.Product_height}
-                              </label>
-                            </div>
                             <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
@@ -322,14 +325,14 @@ function page() {
                                 </div>
                                 <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
-                                    <label>{item.Access_name}</label>
+                                    <label>Flip Outlet</label>
                                   </div>
+                                </div>
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                  <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
-                              <label>Flip</label>
-                            </div>
                             <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
@@ -354,14 +357,14 @@ function page() {
                                 </div>
                                 <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
-                                    <label>{item.Access_name}</label>
+                                    <label>Vertical Wireway</label>
                                   </div>
+                                </div>
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                  <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
-                              <label>Vertical Wireway</label>
-                            </div>
                             <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
@@ -386,14 +389,14 @@ function page() {
                                 </div>
                                 <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                                   <div className="col-12" align="center">
-                                    <label>{item.Access_name}</label>
+                                    <label>ช่องร้อยสายไฟ</label>
                                   </div>
+                                </div>
+                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                  <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
-                              <label>ช่องร้อยสายไฟ</label>
-                            </div>
                             <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
                               <label>1</label>
                             </div>
@@ -435,7 +438,7 @@ function page() {
               </div>
               <div className="line-space-1"></div>
               <div className="row ptk-line-description">
-                <div className="col-3 ptk-text-description">ขนาด(มม)</div>
+                <div className="col-3 ptk-text-description">ขนาด (มม.)</div>
                 <div className="col-2 ptk-text-detail">กว้าง x ลึก x สูง</div>
                 <div className="col-6 ptk-text-detail">
                   {item.Product_width} x {item.Product_depth} x{" "}
@@ -456,7 +459,7 @@ function page() {
               {modesty != "undefined" && (
                 <div className="row ptk-line-description">
                   <div className="col-3 ptk-text-description">
-                    Modesty Panel
+                    Modesty
                   </div>
                   <div className="col-2 ptk-text-detail"></div>
                   <div className="col-6 ptk-text-detail">{modesty}</div>
@@ -709,7 +712,7 @@ function page() {
                 <div className="line-space-1"></div>
                 <div className="line-description">
                   <div className="row">
-                    <div className="col-3 text-description">ขนาด(มม)</div>
+                    <div className="col-3 text-description">ขนาด (มม.)</div>
                     <div className="col-2 text-detail">กว้าง x ลึก x สูง</div>
                     <div className="col-6 text-detail">
                       {item.Product_width} x {item.Product_depth} x{" "}
@@ -735,9 +738,7 @@ function page() {
                 {modesty != "undefined" && (
                   <div className="line-description">
                     <div className="row">
-                      <div className="col-3 text-description">
-                        Modesty Panel
-                      </div>
+                      <div className="col-3 text-description">Modesty</div>
                       <div className="col-2 text-detail"></div>
                       <div className="col-6 text-detail">{modesty}</div>
                     </div>

@@ -1,0 +1,15 @@
+.grapy {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 0px 7px rgb(100, 100, 100);
+}
+
+.table-box{
+    overflow-y: auto;
+    height: 35vh;
+}
+
+.btn-search:hover{
+    cursor: pointer;
+}

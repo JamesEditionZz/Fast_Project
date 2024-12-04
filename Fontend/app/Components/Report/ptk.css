@@ -1,20 +1,35 @@
 @media print {
+
+    @page {
+        size: A4 !important;
+        /* หรือเปลี่ยนเป็น letter */
+        margin: 0 !important;
+        /* ไม่มีขอบ */
+    }
+
     .btn {
         display: none !important;
     }
 
-    .container {
-        margin: 5px !important;
+    .ptk-img-accessories {
+        padding: 10px !important;
     }
 
-    .container {
-        width: 100%;
+    .width-print {
+        --bs-gutter-x: 1.5rem !important;
+        --bs-gutter-y: 0 !important;
+        width: 85% !important;
+        padding-right: calc(var(--bs-gutter-x) * .5) !important;
+        padding-left: calc(var(--bs-gutter-x) * .5) !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
     }
+
 
     .ptk-font-header {
         margin: 0 !important;
         padding: 0 !important;
-        font-size: 18pt !important;
+        font-size: 20pt !important;
         font-family: 'TH Sarabun', 'Krabi', 'sans-serif' !important;
         font-weight: bold !important;
     }
@@ -49,7 +64,7 @@
         font-family: 'TH Sarabun', 'Krabi', 'sans-serif' !important;
         font-weight: bold !important;
     }
-    
+
     .ptk-text-detail {
         margin: 0 !important;
         padding: 0 !important;
@@ -63,10 +78,20 @@
     src: url('/font/THsarabun/THSarabun.ttf') format('truetype') !important;
 }
 
+.width-print {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    width: 50%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    margin-right: auto;
+    margin-left: auto
+}
+
 .ptk-font-header {
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 18pt !important;
+    font-size: 20pt !important;
     font-family: 'TH Sarabun', 'Krabi', 'sans-serif' !important;
     font-weight: bold !important;
 }

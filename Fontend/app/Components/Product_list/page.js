@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Product_view from "../Product/Table/page";
+import "./Product_list.css";
 
 export default function page() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function page() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8001/api/equipment_list`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/equipment_list`
         );
         const fetchedData = await response.json();
 
@@ -59,7 +60,7 @@ export default function page() {
     setProduct_model(Product_model);
 
     try {
-      const res = await fetch(`http://localhost:8001/api/model`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/model`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +100,7 @@ export default function page() {
 
   const CheckSize = async (depth, width, height) => {
     try {
-      const res = await fetch(`http://localhost:8001/api/checksize`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checksize`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -138,7 +139,7 @@ export default function page() {
 
   const searchprice = async (lowPrice, highPrice) => {
     try {
-      const res = await fetch(`http://localhost:8001/api/checkprice`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkprice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -156,7 +157,7 @@ export default function page() {
 
   const selectitem = async (type) => {
     try {
-      const res = await fetch(`http://localhost:8001/api/selectItem`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/selectItem`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -188,6 +189,7 @@ export default function page() {
     setWidth(0);
     setHeight(0);
   };
+  
 
   return (
     <div>
@@ -205,29 +207,13 @@ export default function page() {
                   </option>
                   <option value={1}>ค้นหาตามขนาด</option>
                   <option value={2}>ค้นหาตามราคา</option>
-                  <option value={3}>ค้นหาประเภทโต๊ะ</option>
+                  <option value={3}>ค้นหาประเภท</option>
                 </select>
               </div>
             </div>
 
             {viewoption == 1 && (
-              <div className="row mb-3">
-                <div className="col-4">
-                  <label>ความลึก (D)</label>
-                  <select
-                    className="form-select"
-                    onChange={(e) => CheckSizeDepth(e.target.value)}
-                  >
-                    <option value="" selected disabled>
-                      เลือกความลึก
-                    </option>
-                    {[
-                      ...new Set(product.map((item) => item.Product_depth)),
-                    ].map((depth, index) => (
-                      <option key={index}>{depth}</option>
-                    ))}
-                  </select>
-                </div>
+              <div className="row mb-3 mt-2">
                 <div className="col-4">
                   <label>ความกว้าง/ยาว (W)</label>
                   <select
@@ -241,6 +227,22 @@ export default function page() {
                       ...new Set(product.map((item) => item.Product_width)),
                     ].map((width, index) => (
                       <option key={index}>{width}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-4">
+                  <label>ความลึก (D)</label>
+                  <select
+                    className="form-select"
+                    onChange={(e) => CheckSizeDepth(e.target.value)}
+                  >
+                    <option value="" selected disabled>
+                      เลือกความลึก
+                    </option>
+                    {[
+                      ...new Set(product.map((item) => item.Product_depth)),
+                    ].map((depth, index) => (
+                      <option key={index}>{depth}</option>
                     ))}
                   </select>
                 </div>
@@ -263,7 +265,7 @@ export default function page() {
               </div>
             )}
             {viewoption == 2 && (
-              <div className="row mb-3">
+              <div className="row mb-3 mt-2">
                 <div className="col-3">
                   <input
                     className="form-control"
@@ -281,25 +283,25 @@ export default function page() {
               </div>
             )}
             {viewoption == 3 && (
-              <div className="row mb-3">
+              <div className="row mb-3 mt-2">
                 <div className="col-12">
                   <select
                     className="form-select mb-2"
                     onChange={(e) => selectitem(e.target.value)}
                   >
                     <option selected disabled>
-                      เลือกประเภทโต๊ะ
+                      เลือกประเภท
                     </option>
-                    {[...new Set(product.map((item) => item.Product_type))].map(
-                      (type, index) => (
-                        <option key={index}>{type}</option>
-                      )
-                    )}
+                    {[
+                      ...new Set(product.map((item) => item.Product_category)),
+                    ].map((type, index) => (
+                      <option key={index}>{type}</option>
+                    ))}
                   </select>
                 </div>
               </div>
             )}
-            <div className="view-option row">
+            <div className="view-option row mt-2">
               {filteredData.length > 0
                 ? filteredData.map((item, index) => (
                     <div
@@ -308,6 +310,7 @@ export default function page() {
                       onClick={() =>
                         setSelectedProduct({
                           Product_name: item.Product_name,
+                          category: item.Product_category,
                           type: item.Product_type,
                           img: item.Product_img,
                           depth: item.Product_depth,
@@ -318,6 +321,7 @@ export default function page() {
                       style={{
                         border:
                           selectedProduct?.Product_name === item.Product_name &&
+                          selectedProduct?.category === item.Product_category &&
                           selectedProduct?.type === item.Product_type &&
                           selectedProduct?.img === item.Product_img &&
                           selectedProduct?.depth === item.Product_depth &&
@@ -328,14 +332,17 @@ export default function page() {
                       }}
                     >
                       <div className="row">
-                        <div className="col-12">
+                        <div className="col-12 d-flex justify-content-center">
                           <Image
-                            className="img-width"
-                            src={`http://localhost:8001${item.Product_img}`}
-                            width={500}
-                            height={300}
+                            className="image-width"
+                            src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                            width={1000}
+                            height={1000}
                             alt="table"
                           />
+                        </div>
+                        <div className="col-12 text-center">
+                          {item.Product_model}
                         </div>
                         <div className="col-12 text-center">
                           {item.Product_width} * {item.Product_depth} *{" "}
@@ -352,11 +359,12 @@ export default function page() {
                   product.map((item, index) => (
                     <>
                       <div
-                        className="col-3 h-50 select-product"
+                        className="col-3 h-50 select-product mt-2"
                         key={index}
                         onClick={() =>
                           setSelectedProduct({
                             Product_name: item.Product_name,
+                            category: item.Product_category,
                             type: item.Product_type,
                             img: item.Product_img,
                             depth: item.Product_depth,
@@ -369,6 +377,7 @@ export default function page() {
                             JSON.stringify(selectedProduct) ===
                             JSON.stringify({
                               Product_name: item.Product_name,
+                              category: item.Product_category,
                               type: item.Product_type,
                               img: item.Product_img,
                               depth: item.Product_depth,
@@ -380,14 +389,17 @@ export default function page() {
                         }}
                       >
                         <div className="row">
-                          <div className="col-12">
+                          <div className="col-12 d-flex justify-content-center">
                             <Image
-                              className="img-width"
-                              src={`http://localhost:8001${item.Product_img}`}
-                              width={500}
-                              height={300}
+                              className="image-width"
+                              src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                              width={1000}
+                              height={1000}
                               alt="table"
                             />
+                          </div>
+                          <div className="col-12 text-center">
+                            {item.Product_model}
                           </div>
                           <div className="col-12 text-center">
                             {item.Product_width} * {item.Product_depth} *{" "}
@@ -433,14 +445,14 @@ export default function page() {
               >
                 <div className="col-12">
                   <Image
-                    className="view-img"
-                    src={`http://localhost:8001${item.Product_img}`}
-                    width={500}
-                    height={500}
+                    className="view-image"
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                    width={1000}
+                    height={1000}
                     alt={`${item.Product_name}`}
                   />
                 </div>
-                <div className="col-12">{item.Product_name}</div>
+                <div className="col-12 d-flex justify-content-center">{item.Product_name}</div>
               </div>
             ))}
           </div>

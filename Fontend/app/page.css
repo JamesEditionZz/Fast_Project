@@ -17,8 +17,8 @@
   margin-top: 10%;
 }
 .selector:hover {
-  background-color: rgb(179, 178, 178);
-  color: white;
+  border: 2px solid gray;
+  font-weight: bold;
 }
 .view-img {
   width: 100%;
@@ -64,7 +64,7 @@
 }
 
 .btn-select-price:hover {
-  background-color: gainsboro;
+  border: 2px gray;
 }
 
 .navbar {
@@ -117,7 +117,7 @@
   border: 1px solid rgb(228, 228, 228);
   height: 40vh;
   border-radius: 7px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 .input-checkbox {
