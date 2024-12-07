@@ -5,9 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import "./Product.css";
 
-export const dynamic = "force-dynamic";
-
-function index() {
+function Page() {
   const routes = useRouter();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
@@ -129,15 +127,13 @@ function index() {
     const dataProduct = encodeURIComponent(JSON.stringify(data));
 
     routes.push(
-      `../Report?data=${dataProduct}&color=${Acccolor}&modesty=${Accmodesty}&screen=${Accscreen}&flip=${Accflip}&positionflip=${Accflipposition}&Electric=${AccElectric}&postionelectric=${AccElectricposition}&Snake=${AccSnake}&other=${textother}`
+      `../Report/Table?data=${dataProduct}&color=${Acccolor}&modesty=${Accmodesty}&screen=${Accscreen}&flip=${Accflip}&positionflip=${Accflipposition}&Electric=${AccElectric}&postionelectric=${AccElectricposition}&Snake=${AccSnake}&other=${textother}`
     );
   };
 
   const handleModel = () => {
     setShowCatalog(!showCatalog);
   };
-
-  console.log(product);
   
 
   return (
@@ -362,20 +358,16 @@ function index() {
             <div className="col-6 img-box">
               <div className="row">
                 <div className="col-6 img-box">
-                  {[...new Set(product.map((item) => item.Product_img))].map(
-                    (img, index) => (
-                      <>
-                        <Image
-                          key={index}
-                          className="img-width"
-                          src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
-                          width={1000}
-                          height={1000}
-                          alt={img}
-                        />
-                      </>
-                    )
-                  )}
+                  {[...new Set(product.map((item) => item.Product_img))].map((img, index) => (
+  			<Image
+    			key={index}
+    			className="img-width"
+    			src={`/${img}/${product[0].Product_Path_img}.jpg`} // This should reference the correct image path or source
+    			width={1000}
+    			height={1000}
+    			alt={img}
+  			/>
+		))}
                 </div>
                 <div className="col-6 p-3 img-box">
                   {[...new Set(product.map((item) => item.Product_name))].map(
@@ -673,20 +665,16 @@ function index() {
             <div className="col-6 img-box">
               <div className="row">
                 <div className="col-6 img-box">
-                  {[...new Set(product.map((item) => item.Product_img))].map(
-                    (img, index) => (
-                      <>
-                        <Image
-                          key={index}
-                          className="img-width"
-                          src={`${process.env.NEXT_PUBLIC_API_URL}${img}`}
-                          width={1000}
-                          height={1000}
-                          alt={img}
-                        />
-                      </>
-                    )
-                  )}
+                  {[...new Set(product.map((item) => item.Product_img))].map((img, index) => (
+  			<Image
+    			key={index}
+    			className="img-width"
+    			src={`/${img}/${product[0].Product_Path_img}.jpg`} // This should reference the correct image path or source
+    			width={1000}
+    			height={1000}
+    			alt={img}
+  			/>
+		))}
                 </div>
                 <div className="col-6 p-3 img-box">
                   {[...new Set(product.map((item) => item.Product_name))].map(
@@ -768,4 +756,4 @@ function index() {
   );
 }
 
-export default index;
+export default Page;

@@ -2,9 +2,7 @@
 
     @page {
         size: A4 !important;
-        /* หรือเปลี่ยนเป็น letter */
         margin: 0 !important;
-        /* ไม่มีขอบ */
     }
 
     .btn {

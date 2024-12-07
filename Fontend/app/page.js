@@ -50,6 +50,7 @@ export default function Home() {
     }
   };
   
+  
   return (
     <>
       <div className="bg-page">
@@ -68,7 +69,7 @@ export default function Home() {
                 <div className="col-12">
                   <Image
                     className="img-width"
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                    src={`${item.Product_img}${item.Product_img_name}`}
                     width={500}
                     height={500}
                     alt="image"

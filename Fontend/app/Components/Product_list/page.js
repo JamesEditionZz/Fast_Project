@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Product_view from "../Product/Table";
 import "./Product_list.css";
 
 export default function page() {
@@ -182,9 +181,17 @@ export default function page() {
   };
 
   const handleSubmit = async () => {
-    const productData = encodeURIComponent(JSON.stringify(selectedProduct));
-    router.push(`../Components/Product?data=${productData}`);
+    if (selectedProduct.type == "Table") {
+      const productData = encodeURIComponent(JSON.stringify(selectedProduct));
+      router.push(`../Components/Product/Table?data=${productData}`);
+    } else {
+      const productData = encodeURIComponent(JSON.stringify(selectedProduct));
+      router.push(`../Components/Report/Chair?data=${productData}`);
+    }
   };
+
+  console.log(selectedProduct);
+  
 
   const cancelModel = () => {
     setProduct(0);
@@ -196,7 +203,9 @@ export default function page() {
     setDepth(0);
     setWidth(0);
     setHeight(0);
-  };  
+  };
+
+  console.log(selectedProduct);
 
   return (
     <div>
@@ -317,6 +326,7 @@ export default function page() {
                       onClick={() =>
                         setSelectedProduct({
                           Product_name: item.Product_name,
+                          Product_model: item.Product_model,
                           category: item.Product_category,
                           type: item.Product_type,
                           img: item.Product_img,
@@ -328,6 +338,8 @@ export default function page() {
                       style={{
                         border:
                           selectedProduct?.Product_name === item.Product_name &&
+                          selectedProduct?.Product_model ===
+                            item.Product_model &&
                           selectedProduct?.category === item.Product_category &&
                           selectedProduct?.type === item.Product_type &&
                           selectedProduct?.img === item.Product_img &&
@@ -338,14 +350,18 @@ export default function page() {
                             : "none",
                       }}
                     >
-                      <div className="row image-center">
-                        <div className="col-12">
+                      <div className="row mb-3">
+                        <div className="col-12 image-center">
                           <Image
-                            className={`${item.Product_type == "chair"} ? image-width-chair : "image-width-table"`}
-                            src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                            className={`image-width-product ${
+                              item.Product_type === "Table"
+                                ? "image-width-table"
+                                : ""
+                            }`}
+                            src={`/${item.Product_img}/${item.Product_Path_img}.jpg`}
                             width={1000}
                             height={1000}
-                            alt="table"
+                            alt={item.Product_name}
                           />
                         </div>
                         <div className="text-item">
@@ -368,11 +384,12 @@ export default function page() {
                   product.map((item, index) => (
                     <>
                       <div
-                        className="col-4 select-product mt-2"
+                        className="col-4 select-product mt-2 mt-3"
                         key={index}
                         onClick={() =>
                           setSelectedProduct({
                             Product_name: item.Product_name,
+                            Product_model: item.Product_model,
                             category: item.Product_category,
                             type: item.Product_type,
                             img: item.Product_img,
@@ -383,28 +400,33 @@ export default function page() {
                         }
                         style={{
                           border:
-                            JSON.stringify(selectedProduct) ===
-                            JSON.stringify({
-                              Product_name: item.Product_name,
-                              category: item.Product_category,
-                              type: item.Product_type,
-                              img: item.Product_img,
-                              depth: item.Product_depth,
-                              width: item.Product_width,
-                              height: item.Product_height,
-                            })
+                            selectedProduct?.Product_name ===
+                              item.Product_name &&
+                            selectedProduct?.Product_model ===
+                              item.Product_model &&
+                            selectedProduct?.category ===
+                              item.Product_category &&
+                            selectedProduct?.type === item.Product_type &&
+                            selectedProduct?.img === item.Product_img &&
+                            selectedProduct?.depth === item.Product_depth &&
+                            selectedProduct?.width === item.Product_width &&
+                            selectedProduct?.height === item.Product_height
                               ? "2px solid rgb(136, 111, 111)"
                               : "none",
                         }}
                       >
-                        <div className="row">
+                        <div className="row mb-3">
                           <div className="col-12 image-center">
                             <Image
-                              className={`${item.Product_type == "chair"} ? image-width-chair : "image-width-table"` }
-                              src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                              className={`image-width-product ${
+                                item.Product_type === "Table"
+                                  ? "image-width-table"
+                                  : ""
+                              }`}
+                              src={`/${item.Product_img}/${item.Product_Path_img}.jpg`}
                               width={1000}
                               height={1000}
-                              alt="table"
+                              alt={item.Product_name}
                             />
                           </div>
                           <div className="text-item">
@@ -452,21 +474,19 @@ export default function page() {
               <div
                 className="col-2 selector text-center"
                 key={index}
-                onClick={() => handleSelected(item.Product_name)} // ส่ง Product_name เมื่อกดเลือก
+                onClick={() => handleSelected(item.Product_name)}
               >
                 <div className="col-12 image-center">
                   <Image
                     className="view-image"
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                    src={`/${item.Product_img}${item.Product_img_name}`}
                     width={1000}
                     height={1000}
                     alt={`${item.Product_name}`}
                   />
                 </div>
                 <div className="text-item">
-                  <div className="col-12">
-                    {item.Product_name}
-                  </div>
+                  <div className="col-12">{item.Product_name}</div>
                 </div>
               </div>
             ))}

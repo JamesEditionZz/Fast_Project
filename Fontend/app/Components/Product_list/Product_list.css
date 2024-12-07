@@ -3,24 +3,14 @@
     height: 100%;
 }
 
-.image-width-chair {
-    width: 100%;
-    height: 100%;
-}
-
-.view-image-chair {
-    width: 100%;
-    height: 100%;
+.image-width-product {
+    width: 90px !important;
+    height: 140px !important;
 }
 
 .image-width-table {
-    width: 100px;
-    height: 100px;
-}
-
-.view-image-table {
-    width: 100px;
-    height: 100px;
+    width: 120px !important;
+    height: 120px !important;
 }
 
 .image-center {
@@ -59,16 +49,6 @@
 .selector:hover {
     border: 2px solid gray;
     font-weight: bold;
-}
-
-.view-img {
-    width: 100%;
-    height: 100%;
-}
-
-.img-width {
-    width: 100%;
-    height: 100%;
 }
 
 .frame-order {

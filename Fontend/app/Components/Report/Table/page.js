@@ -7,7 +7,7 @@ import "./ptk.css";
 import html2pdf from "html2pdf.js";
 
 function index() {
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
   const modesty = searchParams.get("modesty");
@@ -16,6 +16,7 @@ function index() {
   const flip = searchParams.get("flip");
   const Flipposition = searchParams.get("positionflip");
   const Electric = searchParams.get("Electric");
+  const value = searchParams.get("value");
   const Electricposition = searchParams.get("postionelectric");
   const Snake = searchParams.get("Snake");
   const Other = searchParams.get("other");
@@ -28,23 +29,29 @@ function index() {
   const [dataflip, setDataFlip] = useState([]);
   const [datawireway, setDataWireway] = useState([]);
   const [dataelectric, setDataElectric] = useState([]);
+  const [datavalue, setDataValue] = useState([]);
 
   const Product_header = JSON.parse(Product);
   const contentRef = useRef(null);
 
+  console.log(value);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ProductReport`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Product,
-            color,
-          }), // ใช้ data จาก query string
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/ProductReport`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              Product,
+              color,
+            }), // ใช้ data จาก query string
+          }
+        );
 
         const result = await res.json(); // ใช้ชื่อ 'result' แทน 'data' เพื่อหลีกเลี่ยงการซ้ำซ้อน
 
@@ -61,11 +68,14 @@ function index() {
     useEffect(() => {
       const imgmodesty = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/modesty`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ modesty }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/Report/modesty`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ modesty }),
+            }
+          );
 
           const response = await res.json();
 
@@ -82,11 +92,14 @@ function index() {
     useEffect(() => {
       const imgscreen = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Screen`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ screen }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/Report/Screen`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ screen }),
+            }
+          );
 
           const response = await res.json();
 
@@ -103,11 +116,14 @@ function index() {
     useEffect(() => {
       const imgFlip = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Flip`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ flip }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/Report/Flip`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ flip }),
+            }
+          );
 
           const response = await res.json();
 
@@ -124,11 +140,14 @@ function index() {
     useEffect(() => {
       const imgWireway = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Wireway`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Snake }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/Report/Wireway`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ Snake }),
+            }
+          );
 
           const response = await res.json();
 
@@ -145,11 +164,14 @@ function index() {
     useEffect(() => {
       const imgElectric = async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Report/Electric`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Electric }),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/Report/Electric`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ Electric }),
+            }
+          );
 
           const response = await res.json();
 
@@ -186,20 +208,19 @@ function index() {
   };
 
   const btnbackpage = () => {
-    router.back()
-  }
+    router.back();
+  };
 
   const windownreload = () => {
     window.location.reload();
   };
 
   console.log(productreport);
-  
 
   return (
     <>
       <div className="d-flex fixed-top mt-5">
-      <button className="btn btn-danger mx-5" onClick={() => btnbackpage()}>
+        <button className="btn btn-danger mx-5" onClick={() => btnbackpage()}>
           ย้อนกลับ
         </button>
         <button className="btn btn-danger mx-5" onClick={() => btnviewsale()}>
@@ -214,7 +235,8 @@ function index() {
           {productreport.map((item) => (
             <div className="row">
               <div className="col-12 ptk-font-header">
-                {Product_header.type} {Product_header.Product_name} / {productreport[0].Product_model}
+                {Product_header.type} {Product_header.Product_name} /{" "}
+                {productreport[0].Product_model}
               </div>
               <div className="col-12 ptk-border-fixed">
                 <div className="row">
@@ -222,7 +244,7 @@ function index() {
                   <div className="col-4">
                     <Image
                       className="ptk-img-width"
-                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                      src={`/${item.Product_img}/${item.Product_Path_img}.jpg`}
                       width={10000}
                       height={10000}
                     />
@@ -237,38 +259,38 @@ function index() {
                 Snake !== "undefined") && (
                 <div className="mb-4">
                   <div className="col-12 ptk-font-accessories">ACCESSORIES</div>
-                  <div className="col-12 w-100">
+                  <div className="col-12">
                     <div className="row">
                       {modesty != "undefined" && (
                         <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top ptk-border-left text-center">
+                            <div className="col-12 accessories-border-top accessories-border ptk-font-text-accessories text-center accessories-left">
                               FG________
                             </div>
                             {datamodesty.map((item) => (
                               <>
-                                <div className="col-12 ptk-border-box-accessories ptk-border-left text-center">
+                                <div className="col-12 accessories-border text-center accessories-left">
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                    src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
+                                <div className="col-12 accessories-border ptk-font-text-accessories text-center accessories-left">
                                   <div className="col-12" align="center">
                                     <label>Modesty</label>
                                   </div>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
+                            <div className="col-12 accessories-border ptk-font-text-accessories text-center accessories-left">
                               <label>
                                 {item.Product_width} x {item.Product_depth} x{" "}
                                 {item.Product_height}
                               </label>
                             </div>
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-left text-center">
+                            <div className="col-12 accessories-border ptk-font-text-accessories text-center accessories-left">
                               <label>1</label>
                             </div>
                           </div>
@@ -277,30 +299,30 @@ function index() {
                       {screen != "undefined" && (
                         <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top text-center">
+                            <div className={`col-12 accessories-border-top accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               FG________
                             </div>
                             {datascreen.map((item) => (
                               <>
-                                <div className="col-12 ptk-border-box-accessories text-center">
+                                <div className={`col-12 accessories-border text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                    src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <div className="col-12" align="center">
                                     <label>Screen</label>
                                   </div>
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                            <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               <label>1</label>
                             </div>
                           </div>
@@ -309,30 +331,30 @@ function index() {
                       {flip != "undefined" && (
                         <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top ptk-border-top text-center">
+                          <div className={`col-12 accessories-border-top accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               FG________
                             </div>
                             {dataflip.map((item) => (
                               <>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                    src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <div className="col-12" align="center">
                                     <label>Flip Outlet</label>
                                   </div>
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                            <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               <label>1</label>
                             </div>
                           </div>
@@ -341,30 +363,30 @@ function index() {
                       {Snake != "undefined" && (
                         <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top text-center">
+                            <div className={`col-12 accessories-border-top accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               FG________
                             </div>
                             {datawireway.map((item) => (
                               <>
-                                <div className="col-12 ptk-border-box-accessories text-center">
+                                <div className={`col-12 accessories-border text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                    src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <div className="col-12" align="center">
                                     <label>Vertical Wireway</label>
                                   </div>
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                            <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               <label>1</label>
                             </div>
                           </div>
@@ -373,30 +395,30 @@ function index() {
                       {Electric != "undefined" && (
                         <div className="ptk-col-2-accessories">
                           <div className="row">
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories ptk-border-top text-center">
+                            <div className={`col-12 accessories-border-top accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               FG________
                             </div>
                             {dataelectric.map((item) => (
                               <>
-                                <div className="col-12 ptk-border-box-accessories text-center">
+                                <div className={`col-12 accessories-border text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <Image
                                     className="ptk-img-accessories"
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                    src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                     width={1000}
                                     height={1000}
                                   />
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <div className="col-12" align="center">
                                     <label>ช่องร้อยสายไฟ</label>
                                   </div>
                                 </div>
-                                <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                                <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                                   <label>{item.Access_name}</label>
                                 </div>
                               </>
                             ))}
-                            <div className="col-12 ptk-border-box-accessories ptk-font-text-accessories text-center">
+                            <div className={`col-12 accessories-border ptk-font-text-accessories text-center ${modesty === "undefined" ? "accessories-left" : ""}`}>
                               <label>1</label>
                             </div>
                           </div>
@@ -457,9 +479,7 @@ function index() {
               <div className="line-space-2"></div>
               {modesty != "undefined" && (
                 <div className="row ptk-line-description">
-                  <div className="col-3 ptk-text-description">
-                    Modesty
-                  </div>
+                  <div className="col-3 ptk-text-description">Modesty</div>
                   <div className="col-2 ptk-text-detail"></div>
                   <div className="col-6 ptk-text-detail">{modesty}</div>
                 </div>
@@ -523,7 +543,7 @@ function index() {
                     <div className="col-4">
                       <Image
                         className="img-width"
-                        src={`${process.env.NEXT_PUBLIC_API_URL}${item.Product_img}`}
+                        src={`/${item.Product_img}/${item.Product_Path_img}.jpg`}
                         width={10000}
                         height={10000}
                       />
@@ -548,7 +568,7 @@ function index() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                      src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                       width={10000}
                                       height={10000}
                                     />
@@ -573,7 +593,7 @@ function index() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                      src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -598,7 +618,7 @@ function index() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                      src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -623,7 +643,7 @@ function index() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                      src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                       width={1000}
                                       height={1000}
                                     />
@@ -648,7 +668,7 @@ function index() {
                                   <div className="col-12 text-center">
                                     <Image
                                       className="img-accessories"
-                                      src={`${process.env.NEXT_PUBLIC_API_URL}${item.Access_img}`}
+                                      src={`/${item.Access_img}/${item.Access_img_name}.jpg`}
                                       width={1000}
                                       height={1000}
                                     />
